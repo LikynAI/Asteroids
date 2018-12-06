@@ -57,12 +57,12 @@ namespace game
 			objs = new BaseObject[45];
 			for (int i = 0; i < objs.Length/3; i++)
 			{
-				objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i-1,-i-1), new Size(10, 10));
+				objs[i] = new BaseObject(new Point(600, i * 40), new Point(0,0), new Size(25, 25));
 			}
 
 			for (int i = objs.Length / 3; i < objs.Length / 3 * 2; i++)
 			{
-				objs[i] = new Star(new Point(600, (i - objs.Length / 3)*40), new Point(-i, 0), new Size(5, 5));
+				objs[i] = new Star(new Point(600, (i - objs.Length / 3)*40), new Point(-i, 0), new Size(25, 25));
 			}
 
 
