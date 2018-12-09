@@ -8,8 +8,15 @@ namespace game
 		static void Main(string[] args)
 		{
 			Form form = new Form();
-			form.Width = 800;
-			form.Height = 600;
+			try
+			{
+				form.Width = 1680;
+				form.Height = 1050;
+			}
+			catch
+			{
+				throw new ArgumentOutOfRangeException();
+			}
 			Game.Init(form);
 			form.Show();
 			Game.Draw();

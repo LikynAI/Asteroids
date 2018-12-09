@@ -8,14 +8,26 @@ namespace game
 	{
 		private static BufferedGraphicsContext contex;
 		public static BufferedGraphics Buffer;
+		static Form form;
 
 		public static int Width { get; set; }
 		public static int Height { get; set; }
 
-		public static BaseObject[] objs;
+		public static Asteroid[] Asteroids;
+		public static BaseObject[] BackScreen;
+		public static Bullet[] Bullets;
+		public static Ship ship;
 
-		public static void Init(Form form)
+		/// <summary>
+		/// Запуск игры
+		/// </summary>
+		/// <param name="form"></param>
+		public static void Init(Form _form)
 		{
+			form = _form;
+
+			form. Focus();
+
 			Graphics g;
 
 			contex = BufferedGraphicsManager.Current;
@@ -29,53 +41,143 @@ namespace game
 
 			Load();
 
-			Timer timer = new Timer { Interval = 1 };
+			Timer timer = new Timer { Interval = 10};
 			timer.Start();
 			timer.Tick += Timer_Tick;
 		}
 
+		/// <summary>
+		/// Отрисовывает все объекты
+		/// </summary>
 		public static void Draw()
 		{
 			Buffer.Graphics.Clear(Color.Black);
-			foreach (BaseObject obj in objs)
+			foreach (BaseObject obj in BackScreen)
 			{
-				obj.Draw();
+				if (obj != null)
+				{
+					obj.Draw();
+				}
 			}
+
+			foreach (var Asteroid in Asteroids)
+			{
+				if (Asteroid != null)
+				{
+					Asteroid.Draw();
+				}
+			}
+
+			foreach (var Bullet in Bullets)
+			{
+				if (Bullet != null)
+				{
+					Bullet.Draw();
+				}
+			}
+
+			ship.Draw();
+
 			Buffer.Render();
 		}
 
+		/// <summary>
+		/// Обновляет Положение всех объектов
+		/// </summary>
 		public static void Update()
 		{
-			foreach (BaseObject obj in objs)
+			foreach (BaseObject obj in BackScreen)
 			{
-				obj.Update();
+				if (obj != null)
+				{
+					obj.Update();
+				}
 			}
+
+			foreach (var Asteroid in Asteroids)
+			{
+				if (Asteroid != null)
+				{
+					Asteroid.Update();
+					if (Bullets != null)
+					{
+						foreach (var Bullet in Bullets)
+						{
+							if (Bullet != null && Asteroid.Collision(Bullet))
+							{
+								Asteroid.Shooted();
+							}
+						}
+					}
+
+					foreach (var Asteroid1 in Asteroids)
+					{
+						if (Asteroid1 != null && !Equals(Asteroid1,Asteroid) && Asteroid.Collision(Asteroid1))
+						{
+							Asteroid.Hit(Asteroid1);
+						}
+					}
+				}
+			}
+
+			foreach (var Bullet in Bullets)
+			{
+				if (Bullet != null)
+				{
+					Bullet.Update();
+				}
+			}
+
+			ship.Update();
 		}
 
+		/// <summary>
+		/// Загружает все объекты
+		/// </summary>
 		public static void Load()
 		{
-			objs = new BaseObject[45];
-			for (int i = 0; i < objs.Length/3; i++)
+			Random r = new Random();
+
+			Asteroids = new Asteroid[20];
+			BackScreen = new BaseObject[40];
+		
+			for (int i = 0; i < BackScreen.Length / 2; i++)
 			{
-				objs[i] = new BaseObject(new Point(600, i * 40), new Point(0,0), new Size(25, 25));
+				BackScreen[i] = new Star(new Point(r.Next(Width), i * 40), new Point(-i/*0*/, 0), new Size(5, 5));
 			}
 
-			for (int i = objs.Length / 3; i < objs.Length / 3 * 2; i++)
+			for (int i = BackScreen.Length / 2; i < BackScreen.Length ; i++)
 			{
-				objs[i] = new Star(new Point(600, (i - objs.Length / 3)*40), new Point(-i, 0), new Size(25, 25));
+				BackScreen[i] = new Dot(new Point(r.Next(Width), (BackScreen.Length - i) * 40), new Point(-BackScreen.Length  +i/*0, 0*/), new Size(4, 4));
 			}
 
-
-			for (int i = objs.Length / 3 * 2; i < objs.Length ; i++)
+			for (int i = 0; i < 5; i++)
 			{
-				objs[i] = new Dot(new Point(600, (i - objs.Length / 3 * 2) * 40+20), new Point(-objs.Length*4/3 + i , 0), new Size(4, 4));
+				Asteroids[i] = new Asteroid(new Point(r.Next(Width - 40), i * 40), new Point(r.Next(-3, 3), r.Next(-3, 3)), new Size(50, 50));
 			}
+			Bullets = new Bullet[10];
+			ship = new Ship(new Point(400,300), new Point(0, 0), new Size(20, 20));
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private static void Timer_Tick(object sender, EventArgs e)
 		{
+			if (Console.KeyAvailable)
+			{
+				ConsoleKeyInfo k = Console.ReadKey();
+				if (k.Key == ConsoleKey.Spacebar)
+				{
+					Bullets[0] = ship.Shoot();
+				}
+				else { ship.move(k); }
+			}
 			Draw();
 			Update();
+			
 		}
 	}
 }

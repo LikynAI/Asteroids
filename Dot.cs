@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace game
 {
+	/// <summary>
+	/// Класс объекта точка
+	/// </summary>
 	class Dot : Star
 	{
 		public Dot(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size) { }

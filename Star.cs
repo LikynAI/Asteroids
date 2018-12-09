@@ -3,14 +3,17 @@ using System.Drawing;
 
 namespace game
 {
+	/// <summary>
+	/// Класс объекта звезда
+	/// </summary>
 	class Star : BaseObject
 	{
 		public Star(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size) { }
 
 		public override void Draw()
 		{
-			Image star = Image.FromFile("star.png");
-			Game.Buffer.Graphics.DrawImage(star, Pos.X, Pos.Y, Size.Width, Size.Height);
+			Game.Buffer.Graphics.DrawLine(Pens.White, Pos.X, Pos.Y, Pos.X + Size.Width, Pos.Y + Size.Height);
+			Game.Buffer.Graphics.DrawLine(Pens.White, Pos.X + Size.Width, Pos.Y, Pos.X, Pos.Y + Size.Height);
 		}
 
 		public override void Update()
