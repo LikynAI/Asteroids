@@ -31,7 +31,7 @@ namespace game
 
 		public void Shooted()
 		{
-
+			
 		}
 
 		public override void Update()
