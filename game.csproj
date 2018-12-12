@@ -51,6 +51,8 @@
     <Compile Include="Asteroid.cs" />
     <Compile Include="BaseObject.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="Counter.cs" />
+    <Compile Include="Heal.cs" />
     <Compile Include="ICollision.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Dot.cs" />

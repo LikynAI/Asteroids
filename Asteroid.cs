@@ -12,11 +12,18 @@ namespace game
 			Power = 1;
 		}
 
+		/// <summary>
+		/// Отрисовывает астероид
+		/// </summary>
 		public override void Draw()
 		{
 			Game.Buffer.Graphics.DrawEllipse(Pens.White,new Rectangle(Pos.X, Pos.Y, Size.Width, Size.Height));
 		}
 
+		/// <summary>
+		/// изменяет траектории астероидов при столкновении
+		/// </summary>
+		/// <param name="a"></param>
 		public void Hit(Asteroid a)
 		{
 			int x = Dir.X;
@@ -31,9 +38,12 @@ namespace game
 
 		public void Shooted()
 		{
-			
+			Spawn();
 		}
 
+		/// <summary>
+		/// обновляет положение астероида
+		/// </summary>
 		public override void Update()
 		{
 			Pos.X = Pos.X + Dir.X;
@@ -45,11 +55,42 @@ namespace game
 			if (Pos.Y > Game.Height - Size.Height) { Dir.Y = -Dir.Y; }
 		}
 
+		/// <summary>
+		/// Спаун астероида за экраном
+		/// </summary>
 		public void Spawn()
 		{
+			Random r = new Random();
+			int t = r.Next(4);
+
+			if (t == 0)
+			{
+				Pos.X = 20;
+				Pos.Y = 20;
+			}
+			else if (t == 1)
+			{
+				Pos.X = 20;
+				Pos.Y = 900;
+			}
+			else if (t == 2)
+			{
+				Pos.X = 900;
+				Pos.Y = 20;
+			}
+			else if (t == 3)
+			{
+				Pos.X = 900;
+				Pos.Y = 900;
+			}
 
 		}
 
+		/// <summary>
+		/// Проверяет астероид на столкновение с объектом
+		/// </summary>
+		/// <param name="o"></param>
+		/// <returns></returns>
 		public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
 
 		public Rectangle Rect => new Rectangle(Pos, Size);

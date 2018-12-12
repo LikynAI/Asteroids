@@ -15,8 +15,10 @@ namespace game
 
 		public static Asteroid[] Asteroids;
 		public static BaseObject[] BackScreen;
-		public static Bullet[] Bullets;
 		public static Ship ship;
+		public static Counter Lifes;
+		public static Counter Score;
+		int score;
 
 		/// <summary>
 		/// Запуск игры
@@ -44,6 +46,8 @@ namespace game
 			Timer timer = new Timer { Interval = 10};
 			timer.Start();
 			timer.Tick += Timer_Tick;
+
+			form.KeyDown += ship.ButtonPres;
 		}
 
 		/// <summary>
@@ -68,7 +72,7 @@ namespace game
 				}
 			}
 
-			foreach (var Bullet in Bullets)
+			foreach (var Bullet in ship.Bullets)
 			{
 				if (Bullet != null)
 				{
@@ -79,6 +83,9 @@ namespace game
 			ship.Draw();
 
 			Buffer.Render();
+
+			Lifes.Draw();
+			Score.Draw();
 		}
 
 		/// <summary>
@@ -99,13 +106,14 @@ namespace game
 				if (Asteroid != null)
 				{
 					Asteroid.Update();
-					if (Bullets != null)
+					if (ship.Bullets != null)
 					{
-						foreach (var Bullet in Bullets)
+						foreach (var Bullet in ship.Bullets)
 						{
 							if (Bullet != null && Asteroid.Collision(Bullet))
 							{
 								Asteroid.Shooted();
+								Score.Count++;
 							}
 						}
 					}
@@ -120,15 +128,17 @@ namespace game
 				}
 			}
 
-			foreach (var Bullet in Bullets)
+			foreach (var Bullet in ship.Bullets)
 			{
 				if (Bullet != null)
 				{
 					Bullet.Update();
 				}
 			}
-
 			ship.Update();
+
+			Lifes.Update(ship.hp);
+			Score.Update(Score.Count);
 		}
 
 		/// <summary>
@@ -155,8 +165,10 @@ namespace game
 			{
 				Asteroids[i] = new Asteroid(new Point(r.Next(Width - 40), i * 40), new Point(r.Next(-3, 3), r.Next(-3, 3)), new Size(50, 50));
 			}
-			Bullets = new Bullet[10];
 			ship = new Ship(new Point(400,300), new Point(0, 0), new Size(20, 20));
+
+			Lifes = new Counter(new Point(400, 400), new Point(), new Size(10,10), 0);
+			Score = new Counter(new Point(500, 500), new Point(), new Size(10,10), ship.hp);
 		}
 
 		/// <summary>
@@ -166,18 +178,8 @@ namespace game
 		/// <param name="e"></param>
 		private static void Timer_Tick(object sender, EventArgs e)
 		{
-			if (Console.KeyAvailable)
-			{
-				ConsoleKeyInfo k = Console.ReadKey();
-				if (k.Key == ConsoleKey.Spacebar)
-				{
-					Bullets[0] = ship.Shoot();
-				}
-				else { ship.move(k); }
-			}
 			Draw();
-			Update();
-			
+			Update();			
 		}
 	}
 }

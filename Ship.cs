@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace game
 {
-	class Ship : BaseObject//, ICollision;
+	class Ship : BaseObject, ICollision
 	{
+		public Bullet[] Bullets;
+		private int BulletNumber;
 		public Point[] shippoints;
 		Point nose;
+		public int hp;
 		int angle = 259;
 
 		public Ship(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size)
@@ -14,7 +19,6 @@ namespace game
 			nose = new Point(Pos.X, Pos.Y + Size.Height);
 
 			double tempo = angle / 20.6d;
-
 
 			shippoints = new Point[] 
 			{
@@ -29,7 +33,12 @@ namespace game
 				Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo+2.5) * Size.Height))),
 
 				nose
+
 			};
+
+			Bullets = new Bullet[10];
+			BulletNumber = 0;
+			hp = 3;
 		}
 
 		/// <summary>
@@ -69,32 +78,39 @@ namespace game
 		/// Обрабатывает нажатие клавишь
 		/// </summary>
 		/// <param name="k"></param>
-		public void move(ConsoleKeyInfo k) 
+		public void ButtonPres(object sender, KeyEventArgs k) 
 		{
-			if (k.Key == ConsoleKey.W)
+			if (k.KeyCode == Keys.W)
 			{
-				Dir.X += (nose.X - Pos.X) /  5;
+				Dir.X += (nose.X - Pos.X) / 5;
 				Dir.Y += (nose.Y - Pos.Y) / 5;
 			}
-			else if (k.Key == ConsoleKey.S)
+			if (k.KeyCode == Keys.A)
 			{
-				
+				angle += 2;
+		 		Turn();
+				Draw();
 			}
-			else if (k.Key == ConsoleKey.D)
+			if (k.KeyCode == Keys.D)
 			{
-				angle += 1;
+				angle -= 2;
 				Turn();
+				Draw();
 			}
-			else if (k.Key == ConsoleKey.A)
+			if (k.KeyCode == Keys.ShiftKey)
 			{
-				angle -= 1;
-				Turn();
+				Shoot();
 			}
 		}
 
-		public Bullet Shoot()
+		/// <summary>
+		/// Создает объект пуля
+		/// </summary>
+		/// <returns></returns>
+		public void Shoot()
 		{
-			return new Bullet(Pos, new Point(nose.X - Pos.X, nose.Y - Pos.Y), new Size(1,1));
+			Bullets[BulletNumber++] = new Bullet(Pos, new Point(nose.X - Pos.X, nose.Y - Pos.Y), new Size(1,1));
+			if (BulletNumber >= 10) { BulletNumber = 0; }
 		}
 
 		/// <summary>
@@ -115,5 +131,23 @@ namespace game
 			shippoints[3].X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo+2.5) * Convert.ToDouble(Size.Height)));
 			shippoints[3].Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo+2.5) * Convert.ToDouble(Size.Height)));
 		}
+
+		/// <summary>
+		/// Проверяет корабль на столкновение с объектом
+		/// </summary>
+		/// <param name="o"></param>
+		/// <returns></returns>
+		public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
+
+		public Rectangle Rect => new Rectangle(Pos, Size);
+
+		public void HpLow()
+		{
+			hp--;
+			if (hp == 0) { Deth(); }
+		}
+		public void HpUp() { hp++; }
+
+		public void Deth() { }
 	}
 }

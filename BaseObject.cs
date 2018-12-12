@@ -19,6 +19,9 @@ namespace game
 			this.Size = Size;
 		}
 		
+		/// <summary>
+		/// Отрисовывает положение объекта
+		/// </summary>
 		public abstract void Draw();
 
 		/// <summary>
