@@ -10,12 +10,18 @@ namespace game
 	{
 		public Star(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size) { }
 
+		/// <summary>
+		/// Отрисовка звезды
+		/// </summary>
 		public override void Draw()
 		{
 			Game.Buffer.Graphics.DrawLine(Pens.White, Pos.X, Pos.Y, Pos.X + Size.Width, Pos.Y + Size.Height);
 			Game.Buffer.Graphics.DrawLine(Pens.White, Pos.X + Size.Width, Pos.Y, Pos.X, Pos.Y + Size.Height);
 		}
 
+		/// <summary>
+		/// Обновление положения звезды
+		/// </summary>
 		public override void Update()
 		{
 			Pos.X = Pos.X + Dir.X;

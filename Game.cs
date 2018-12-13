@@ -205,6 +205,9 @@ namespace game
 			Update();
 		}
 
+		/// <summary>
+		/// Метод окончания игры
+		/// </summary>
 		public static void endgame()
 		{
 			timer.Stop();

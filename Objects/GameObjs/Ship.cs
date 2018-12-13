@@ -133,7 +133,7 @@ namespace game
 		}
 
 		/// <summary>
-		/// понижает показатель Hp на еденицу
+		/// понижает показатель Hp корабля на еденицу
 		/// </summary>
 		public void HpLow()
 		{
@@ -142,7 +142,7 @@ namespace game
 		}
 
 		/// <summary>
-		/// Повышает показатель Hp на еденицу
+		/// Повышает показатель Hp корабля на еденицу
 		/// </summary>
 		public void HpUp() { hp++; }
 

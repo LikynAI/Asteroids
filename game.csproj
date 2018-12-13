@@ -48,18 +48,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Asteroid.cs" />
-    <Compile Include="BaseObject.cs" />
-    <Compile Include="Bullet.cs" />
-    <Compile Include="Counter.cs" />
-    <Compile Include="Heal.cs" />
-    <Compile Include="ICollision.cs" />
+    <Compile Include="Objects\BackGround\Asteroid.cs" />
+    <Compile Include="Objects\GameObjs\BaseObject.cs" />
+    <Compile Include="Objects\GameObjs\Bullet.cs" />
+    <Compile Include="Objects\BackGround\Counter.cs" />
+    <Compile Include="Objects\GameObjs\Heal.cs" />
+    <Compile Include="Interfaces\ICollision.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="Dot.cs" />
+    <Compile Include="Objects\BackGround\Dot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ship.cs" />
-    <Compile Include="Star.cs" />
+    <Compile Include="Objects\GameObjs\Ship.cs" />
+    <Compile Include="Objects\BackGround\Star.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
