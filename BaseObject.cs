@@ -8,9 +8,9 @@ namespace game
 	/// </summary>
 	abstract class BaseObject 
 	{
-		protected Point Pos;
-		protected Point Dir;
-		protected Size Size;
+		public Point Pos;
+		public Point Dir;
+		public Size Size;
 
 		public BaseObject(Point Pos, Point Dir, Size Size)
 		{

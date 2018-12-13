@@ -24,7 +24,7 @@ namespace game
 		/// изменяет траектории астероидов при столкновении
 		/// </summary>
 		/// <param name="a"></param>
-		public void Hit(Asteroid a)
+		public void Hit(BaseObject a)
 		{
 			int x = Dir.X;
 			int y = Dir.Y;
@@ -83,7 +83,6 @@ namespace game
 				Pos.X = 900;
 				Pos.Y = 900;
 			}
-
 		}
 
 		/// <summary>

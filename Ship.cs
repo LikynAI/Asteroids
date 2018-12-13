@@ -141,13 +141,18 @@ namespace game
 
 		public Rectangle Rect => new Rectangle(Pos, Size);
 
+		/// <summary>
+		/// понижает показатель Hp на еденицу
+		/// </summary>
 		public void HpLow()
 		{
 			hp--;
-			if (hp == 0) { Deth(); }
+			if (hp == 0) { Game.endgame(); }
 		}
-		public void HpUp() { hp++; }
 
-		public void Deth() { }
+		/// <summary>
+		/// Повышает показатель Hp на еденицу
+		/// </summary>
+		public void HpUp() { hp++; }
 	}
 }

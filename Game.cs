@@ -18,7 +18,7 @@ namespace game
 		public static Ship ship;
 		public static Counter Lifes;
 		public static Counter Score;
-		int score;
+		public static Heal heal;
 
 		/// <summary>
 		/// Запуск игры
@@ -28,7 +28,7 @@ namespace game
 		{
 			form = _form;
 
-			form. Focus();
+			form.Focus();
 
 			Graphics g;
 
@@ -43,7 +43,7 @@ namespace game
 
 			Load();
 
-			Timer timer = new Timer { Interval = 10};
+			Timer timer = new Timer { Interval = 10 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
 
@@ -82,10 +82,11 @@ namespace game
 
 			ship.Draw();
 
-			Buffer.Render();
-
 			Lifes.Draw();
 			Score.Draw();
+			heal.Draw();
+
+			Buffer.Render();	
 		}
 
 		/// <summary>
@@ -120,11 +121,21 @@ namespace game
 
 					foreach (var Asteroid1 in Asteroids)
 					{
-						if (Asteroid1 != null && !Equals(Asteroid1,Asteroid) && Asteroid.Collision(Asteroid1))
+						if (Asteroid1 != null && !Equals(Asteroid1, Asteroid) && Asteroid.Collision(Asteroid1))
 						{
 							Asteroid.Hit(Asteroid1);
 						}
 					}
+
+					if (Asteroid.Collision(ship))
+					{
+						Asteroid.Hit(ship);
+						ship.HpLow();
+						if (ship.hp == 1) { heal.Spawn(); }
+						Lifes.Update(ship.hp);
+					}
+
+					heal.Update();
 				}
 			}
 
@@ -150,25 +161,27 @@ namespace game
 
 			Asteroids = new Asteroid[20];
 			BackScreen = new BaseObject[40];
-		
+
 			for (int i = 0; i < BackScreen.Length / 2; i++)
 			{
 				BackScreen[i] = new Star(new Point(r.Next(Width), i * 40), new Point(-i/*0*/, 0), new Size(5, 5));
 			}
 
-			for (int i = BackScreen.Length / 2; i < BackScreen.Length ; i++)
+			for (int i = BackScreen.Length / 2; i < BackScreen.Length; i++)
 			{
-				BackScreen[i] = new Dot(new Point(r.Next(Width), (BackScreen.Length - i) * 40), new Point(-BackScreen.Length  +i/*0, 0*/), new Size(4, 4));
+				BackScreen[i] = new Dot(new Point(r.Next(Width), (BackScreen.Length - i) * 40), new Point(-BackScreen.Length + i/*0, 0*/), new Size(4, 4));
 			}
 
 			for (int i = 0; i < 5; i++)
 			{
 				Asteroids[i] = new Asteroid(new Point(r.Next(Width - 40), i * 40), new Point(r.Next(-3, 3), r.Next(-3, 3)), new Size(50, 50));
 			}
-			ship = new Ship(new Point(400,300), new Point(0, 0), new Size(20, 20));
+			ship = new Ship(new Point(400, 300), new Point(0, 0), new Size(20, 20));
 
-			Lifes = new Counter(new Point(400, 400), new Point(), new Size(10,10), 0);
-			Score = new Counter(new Point(500, 500), new Point(), new Size(10,10), ship.hp);
+			Lifes = new Counter(new Point(10, 10), new Point(), new Size(10, 10), ship.hp);
+			Score = new Counter(new Point(950, 10), new Point(), new Size(10, 10), 0);
+
+			heal = new Heal(new Point(-10,-10), new Point(0,0), new Size(10, 10));
 		}
 
 		/// <summary>
@@ -179,7 +192,13 @@ namespace game
 		private static void Timer_Tick(object sender, EventArgs e)
 		{
 			Draw();
-			Update();			
+			Update();
+		}
+
+		public static void endgame()
+		{
+			form.Close();
+			Console.WriteLine("Lol you died");
 		}
 	}
 }
