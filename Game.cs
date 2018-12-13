@@ -20,6 +20,8 @@ namespace game
 		public static Counter Score;
 		public static Heal heal;
 
+		private static Timer timer = new Timer();
+
 		/// <summary>
 		/// Запуск игры
 		/// </summary>
@@ -43,11 +45,13 @@ namespace game
 
 			Load();
 
-			Timer timer = new Timer { Interval = 10 };
+			timer = new Timer { Interval = 10 };
 			timer.Start();
 			timer.Tick += Timer_Tick;
 
 			form.KeyDown += ship.ButtonPres;
+
+			Ship.MessageDie += endgame;
 		}
 
 		/// <summary>
@@ -135,6 +139,12 @@ namespace game
 						Lifes.Update(ship.hp);
 					}
 
+					if (heal.Collision(ship))
+					{
+						ship.HpUp();
+						heal.stop();
+					}
+
 					heal.Update();
 				}
 			}
@@ -197,8 +207,9 @@ namespace game
 
 		public static void endgame()
 		{
-			form.Close();
-			Console.WriteLine("Lol you died");
+			timer.Stop();
+			Buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline), Brushes.White, 200, 100);
+			Buffer.Render();
 		}
 	}
 }

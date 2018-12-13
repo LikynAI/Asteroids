@@ -6,11 +6,15 @@ namespace game
 	/// <summary>
 	/// Базовый класс объекта
 	/// </summary>
-	abstract class BaseObject 
+	abstract class BaseObject : ICollision
 	{
 		public Point Pos;
 		public Point Dir;
 		public Size Size;
+
+		public static event Message MessageDie;
+
+		public delegate void Message();
 
 		public BaseObject(Point Pos, Point Dir, Size Size)
 		{
@@ -28,5 +32,9 @@ namespace game
 		/// Обновляет положение объекта
 		/// </summary>
 		public abstract void Update();
+
+		public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
+
+		public Rectangle Rect => new Rectangle(Pos, Size);
 	}
 }

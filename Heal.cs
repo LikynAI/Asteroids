@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace game
 {
-	class Heal : BaseObject
+	class Heal : BaseObject, ICollision
 	{
 		public Heal(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size){	}
 
@@ -57,6 +57,15 @@ namespace game
 			}
 			Dir.X = r.Next(3);
 			Dir.Y = r.Next(3);
+		}
+
+		public void stop()
+		{
+			Dir.X = 0;
+			Dir.Y = 0;
+
+			Pos.X = -10;
+			Pos.Y = -10;
 		}
 
 		/// <summary>

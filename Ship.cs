@@ -133,26 +133,19 @@ namespace game
 		}
 
 		/// <summary>
-		/// Проверяет корабль на столкновение с объектом
-		/// </summary>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
-
-		public Rectangle Rect => new Rectangle(Pos, Size);
-
-		/// <summary>
 		/// понижает показатель Hp на еденицу
 		/// </summary>
 		public void HpLow()
 		{
 			hp--;
-			if (hp == 0) { Game.endgame(); }
+			if (hp == 0) { MessageDie?.Invoke(); }
 		}
 
 		/// <summary>
 		/// Повышает показатель Hp на еденицу
 		/// </summary>
 		public void HpUp() { hp++; }
+
+		public static event Message MessageDie;
 	}
 }

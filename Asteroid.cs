@@ -84,14 +84,5 @@ namespace game
 				Pos.Y = 900;
 			}
 		}
-
-		/// <summary>
-		/// Проверяет астероид на столкновение с объектом
-		/// </summary>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public bool Collision(ICollision o) => o.Rect.IntersectsWith(this.Rect);
-
-		public Rectangle Rect => new Rectangle(Pos, Size);
 	}
 }
