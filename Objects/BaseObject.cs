@@ -12,8 +12,6 @@ namespace game
 		public Point Dir;
 		public Size Size;
 
-		public static event Message MessageDie;
-
 		public delegate void Message();
 
 		public BaseObject(Point Pos, Point Dir, Size Size)
@@ -22,7 +20,9 @@ namespace game
 			this.Dir = Dir;
 			this.Size = Size;
 		}
-		
+
+		public BaseObject() { }
+
 		/// <summary>
 		/// Отрисовывает положение объекта
 		/// </summary>

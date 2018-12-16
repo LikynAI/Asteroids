@@ -48,8 +48,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\BackGround\Asteroid.cs" />
-    <Compile Include="Objects\GameObjs\BaseObject.cs" />
+    <Compile Include="Objects\GameObjs\Asteroid.cs" />
+    <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Objects\GameObjs\Bullet.cs" />
     <Compile Include="Objects\BackGround\Counter.cs" />
     <Compile Include="Objects\GameObjs\Heal.cs" />

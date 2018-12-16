@@ -12,25 +12,25 @@ namespace game
 		public Point[] shippoints;
 		Point nose;
 		public int hp;
-		int angle = 259;
+		double angle;
 
 		public Ship(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size)
 		{
 			nose = new Point(Pos.X, Pos.Y + Size.Height);
 
-			double tempo = angle / 20.6d;
+			angle = 0;
 
 			shippoints = new Point[] 
 			{
 				nose
 				,
-				new Point(Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo-2.5) * Size.Height)),
-				Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo-2.5) * Size.Height))),
+				new Point(Pos.X + Convert.ToInt32(Math.Round(Math.Sin(angle-2.5) * Size.Height)),
+				Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(angle-2.5) * Size.Height))),
 
 				new Point(Pos.X + (Pos.X - nose.X)/2, Pos.Y + (Pos.Y - nose.Y)/2),
 
-				new Point(Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo+2.5) * Size.Height)),
-				Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo+2.5) * Size.Height))),
+				new Point(Pos.X + Convert.ToInt32(Math.Round(Math.Sin(angle+2.5) * Size.Height)),
+				Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(angle+2.5) * Size.Height))),
 
 				nose
 
@@ -78,28 +78,12 @@ namespace game
 		/// Обрабатывает нажатие клавишь
 		/// </summary>
 		/// <param name="k"></param>
-		public void ButtonPres(object sender, KeyEventArgs k) 
+		public void Move(object sender, KeyEventArgs k) 
 		{
 			if (k.KeyCode == Keys.W)
 			{
 				Dir.X += (nose.X - Pos.X) / 5;
 				Dir.Y += (nose.Y - Pos.Y) / 5;
-			}
-			if (k.KeyCode == Keys.A)
-			{
-				angle += 2;
-		 		Turn();
-				Draw();
-			}
-			if (k.KeyCode == Keys.D)
-			{
-				angle -= 2;
-				Turn();
-				Draw();
-			}
-			if (k.KeyCode == Keys.ShiftKey)
-			{
-				Shoot();
 			}
 		}
 
@@ -107,29 +91,38 @@ namespace game
 		/// Создает объект пуля
 		/// </summary>
 		/// <returns></returns>
-		public void Shoot()
+		public void Shoot(object sender, KeyEventArgs k)
 		{
-			Bullets[BulletNumber++] = new Bullet(Pos, new Point(nose.X - Pos.X, nose.Y - Pos.Y), new Size(1,1));
-			if (BulletNumber >= 10) { BulletNumber = 0; }
+			if (k.KeyCode == Keys.Space)
+			{
+				Bullets[BulletNumber++] = new Bullet(Pos, new Point(nose.X - Pos.X, nose.Y - Pos.Y), new Size(1, 1));
+				if (BulletNumber >= 10) { BulletNumber = 0; }
+			}
 		}
 
 		/// <summary>
 		/// Поворот корабля
 		/// </summary>
-		private void Turn()
+		public void Rotate(object sender, MouseEventArgs mouse)
 		{
-			double tempo = angle / 20.6d;
-			nose.X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo) * Convert.ToDouble(Size.Height)));
-			nose.Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo) * Convert.ToDouble(Size.Height)));
+			int x = (mouse.Location.X - Pos.X);
+			int y = (mouse.Location.Y - Pos.Y);
 
-			shippoints[1].X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo-2.5) * Convert.ToDouble(Size.Height)));
-			shippoints[1].Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo-2.5) * Convert.ToDouble(Size.Height)));
+			angle = Math.Atan2(x,y);
+
+
+
+			nose.X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(angle) * Convert.ToDouble(Size.Height)));
+			nose.Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(angle) * Convert.ToDouble(Size.Height)));
+
+			shippoints[1].X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(angle - 2.5) * Convert.ToDouble(Size.Height)));
+			shippoints[1].Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(angle - 2.5) * Convert.ToDouble(Size.Height)));
 
 			shippoints[2].X = Pos.X + (Pos.X - nose.X) / 2;
 			shippoints[2].Y = Pos.Y + (Pos.Y - nose.Y) / 2;
 
-			shippoints[3].X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(tempo+2.5) * Convert.ToDouble(Size.Height)));
-			shippoints[3].Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(tempo+2.5) * Convert.ToDouble(Size.Height)));
+			shippoints[3].X = Pos.X + Convert.ToInt32(Math.Round(Math.Sin(angle + 2.5) * Convert.ToDouble(Size.Height)));
+			shippoints[3].Y = Pos.Y + Convert.ToInt32(Math.Round(Math.Cos(angle + 2.5) * Convert.ToDouble(Size.Height)));
 		}
 
 		/// <summary>

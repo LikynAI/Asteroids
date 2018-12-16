@@ -5,12 +5,10 @@ namespace game
 {
 	class Asteroid : BaseObject, ICollision
 	{
-		public int Power;
+		static Random r = new Random();
 
-		public Asteroid(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size)
-		{
-			Power = 1;
-		}
+		public Asteroid(Point Pos, Point Dir, Size Size) : base(Pos, Dir, Size){	}
+		public Asteroid() { }
 
 		/// <summary>
 		/// Отрисовывает астероид
@@ -58,31 +56,41 @@ namespace game
 		/// <summary>
 		/// Спаун астероида за экраном
 		/// </summary>
-		public void Spawn()
+		public static Asteroid Spawn()
 		{
-			Random r = new Random();
-			int t = r.Next(4);
+			
+			int t = r.Next(0,4);
+
+			Asteroid a = new Asteroid();
 
 			if (t == 0)
 			{
-				Pos.X = 20;
-				Pos.Y = 20;
+				a.Pos.X = r.Next(2, 90) * 10;
+				a.Pos.Y = 20;
 			}
 			else if (t == 1)
 			{
-				Pos.X = 20;
-				Pos.Y = 900;
+				a.Pos.X = r.Next(2, 90) * 10;
+				a.Pos.Y = 900;
 			}
 			else if (t == 2)
-			{
-				Pos.X = 900;
-				Pos.Y = 20;
+			{	
+				a.Pos.X = 20;
+				a.Pos.Y = r.Next(2, 90) * 10;
 			}
 			else if (t == 3)
 			{
-				Pos.X = 900;
-				Pos.Y = 900;
+				a.Pos.X = 900;
+				a.Pos.Y = r.Next(2, 90)*10;
 			}
+
+			a.Dir.X = r.Next(1, 4);
+			a.Dir.Y = r.Next(1,4);
+
+			a.Size.Height = 50;
+			a.Size.Width = 50;
+
+			return a;
 		}
 	}
 }
